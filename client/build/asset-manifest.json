@@ -1,0 +1,11 @@
+{
+  "files": {
+    "main.js": "/static/js/main.69cb72b6.js",
+    "static/media/win-sound.mp3": "/static/media/win-sound.8b89e537f689b1c42e2c.mp3",
+    "index.html": "/index.html",
+    "main.69cb72b6.js.map": "/static/js/main.69cb72b6.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.69cb72b6.js"
+  ]
+}
