@@ -1,29 +1,99 @@
-/* In your styles.css or a similar CSS file */
+/* In your styles.css or a similar CSS file
 .confetti-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+/*
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: #f8a400;
+  opacity: 0.8;
+  animation: confetti-fall 1.3s linear 3s;
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
   }
-  
-  .confetti {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    background-color: #f8a400;
-    opacity: 0.8;
-    animation: confetti-fall 1.3s linear 3s;
+  100% {
+    transform: translateY(100vh) rotate(360deg);
   }
-  
-  @keyframes confetti-fall {
-    0% {
-      transform: translateY(-100vh) rotate(0deg);
-    }
-    100% {
-      transform: translateY(100vh) rotate(360deg);
-    }
+} */
+.starburst {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, yellow 50%, transparent 51%);
+
+  border-radius: 50%;
+  animation: starburst 1s ease-out;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+@keyframes starburst {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
   }
-  
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2);
+  }
+}
+
+.timer {
+  font-size: 20px;
+  color: white;
+  /*background: -webkit-linear-gradient(rgb(72, 5, 92), rgb(185, 104, 209), rgb(247, 244, 244));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;*/
+  font-family: 'Times New Roman';
+  font-weight: bold;
+  padding: 5px 0;
+  text-align: center;
+  margin: 5px 0;
+  white-space: nowrap;
+}
+
+.hms {
+  font-size: 32px;
+  color: white;
+  /*background: -webkit-linear-gradient(rgb(72, 5, 92), rgb(185, 104, 209), rgb(247, 244, 244));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;*/
+  font-family: 'Times New Roman';
+  font-weight: bold;
+  padding: 5px 0;
+  display: flex; /* Make the hms div a flex container */
+  justify-content: center; /* Align time units in the center */
+}
+
+.time-unit {
+  display: flex;
+  flex-direction: column; /* Stack time value and label vertically */
+  align-items: center;
+  margin: 0 3px; /* Add some spacing between each time unit */
+}
+
+.label {
+  font-size: 28px; /* Smaller size for h, m, s */
+  color: white;
+  margin: 0 16px;
+  /*background: -webkit-linear-gradient(rgb(72, 5, 92), rgb(185, 104, 209), rgb(247, 244, 244));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;*/
+  margin-top: -8px; /* Move the label closer to the time value */
+  margin-left: 10px;
+}

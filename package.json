@@ -5,19 +5,19 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-  "start": "node server/server.js",
-  "server": "nodemon server/server.js",
-  "client": "npm start --prefix client",
-  
-  "dev": "concurrently \"npm run server\" \"npm run client\""
-},
+    "start": "node server/server.js",
+    "server": "nodemon server/server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
   "author": "Jay reddy",
   "license": "ISC",
-  "dependencies": {    
+  "dependencies": {
     "@chakra-ui/icons": "^2.1.1",
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
+    "canvas-confetti": "^1.9.3",
     "chart.js": "^4.4.4",
     "colors": "^1.4.0",
     "dotenv": "^16.4.5",
