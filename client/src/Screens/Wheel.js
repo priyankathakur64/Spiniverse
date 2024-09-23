@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
+import { FaWhatsapp, FaFacebook } from "react-icons/fa";
+import { BsTwitterX } from "react-icons/bs";
 import {
   Popover,
   PopoverTrigger,
@@ -534,7 +536,6 @@ zIndex={10}
               zIndex="1"
             />
           </Box>
-
           <Box
             as="button"
             position="relative"
@@ -646,7 +647,7 @@ zIndex={10}
                 <Link as={RouterLink} to="/profile">
                   <Button
                     position="relative"
-                    top={32}
+                    top={48}
                     size="lg"
                     fontSize="3xl"
                     bgColor="transparent"
@@ -660,7 +661,65 @@ zIndex={10}
                   </Button>
                 </Link>
               </ModalBody>
-              <ModalFooter my="5"></ModalFooter>
+              <ModalFooter
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                my="5"
+              >
+                <div
+                  style={{ display: "flex", gap: "20px", marginTop: "20px" }}
+                >
+                  <FaWhatsapp
+                    size={40}
+                    color="#25D366"
+                    onClick={() => {
+                      // WhatsApp sharing logic
+                      const message = `Hey! I just won this exciting reward of- ${display} Check out this awesome game here: ${window.location.href} Join the fun and win rewards!`;
+                      window.open(
+                        `https://api.whatsapp.com/send?text=${encodeURIComponent(
+                          message
+                        )}`,
+                        "_blank"
+                      );
+                    }}
+                    style={{ cursor: "pointer" }}
+                    title="Share on WhatsApp"
+                  />
+                  <FaFacebook
+                    size={40}
+                    color="#3b5998"
+                    onClick={() => {
+                      // Facebook sharing logic
+                      window.open(
+                        `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+                          window.location.href
+                        )}`,
+                        "_blank"
+                      );
+                    }}
+                    style={{ cursor: "pointer" }}
+                    title="Share on Facebook"
+                  />
+                  <BsTwitterX
+                    size={40}
+                    color="#1DA1F2"
+                    onClick={() => {
+                      // Twitter sharing logic
+                      const tweet = `I just won! ${display} Check it out here: ${window.location.href}`;
+                      window.open(
+                        `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                          tweet
+                        )}`,
+                        "_blank"
+                      );
+                    }}
+                    style={{ cursor: "pointer" }}
+                    title="Share on Twitter"
+                  />
+                </div>
+              </ModalFooter>
             </ModalContent>
           </Modal>
         </Box>
