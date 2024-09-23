@@ -207,7 +207,7 @@ const Wheel = () => {
     setDisplay("-");
     wheelRef.current.style.pointerEvents = "none";
 
-    const newDeg = Math.floor(1000 + Math.random() * 1000);
+    const newDeg = Math.floor(2000 + Math.random() * 2000);
     const adjustedDeg = newDeg % 360;
     const finalDeg = Math.round(adjustedDeg / 45) * 45;
     const totalRotation = newDeg - adjustedDeg + finalDeg;
@@ -326,7 +326,6 @@ const Wheel = () => {
   const triggerConfetti = () => {
     setShowConfetti(true);
   };
-
   const handleSpin = () => {
     // Perform the spinning action
     spinWheel();
@@ -343,11 +342,19 @@ const Wheel = () => {
       const timerId = setInterval(() => {
         setTimeLeft((prevTime) => prevTime - 1);
       }, 1000);
+
       return () => clearInterval(timerId);
-    } else if (timeLeft === 0 && isSpinDisabled) {
-      setSpinDisabled(false); // Enable spin after timer ends
+    } else if (timeLeft === 0 && !isConnected) {
+      // Keep spin disabled if wallet is not connected
+      setSpinDisabled(true);
+    } else if (timeLeft === 0 && user?.spins === 0) {
+      // Keep spin disabled if no spins are available
+      setSpinDisabled(true);
+    } else if (timeLeft === 0) {
+      // Enable spin only if wallet is connected and spins are available
+      setSpinDisabled(false);
     }
-  }, [timeLeft, isSpinDisabled]);
+  }, [timeLeft, isConnected, user?.spins]);
 
   const hours = Math.floor(timeLeft / 3600);
   const minutes = Math.floor((timeLeft % 3600) / 60);
@@ -528,39 +535,6 @@ zIndex={10}
             />
           </Box>
 
-          {/* Social Share Buttons - Vertical on the right 
-          <Box
-            position="absolute"
-            right="10px"
-            top="50%"
-            transform="translateY(-50%)"
-          >
-            <Flex direction="column" gap={4}>
-              <Tooltip label="Share on Twitter" hasArrow>
-                <TwitterShareButton url={shareUrl} title={title}>
-                  <TwitterIcon size={32} round />
-                </TwitterShareButton>
-              </Tooltip>
-
-              <Tooltip label="Share on Facebook" hasArrow>
-                <FacebookShareButton url={shareUrl} quote={title}>
-                  <FacebookIcon size={32} round />
-                </FacebookShareButton>
-              </Tooltip>
-
-              <Tooltip label="Share on WhatsApp" hasArrow>
-                <WhatsappShareButton url={shareUrl} title={title}>
-                  <WhatsappIcon size={32} round />
-                </WhatsappShareButton>
-              </Tooltip>
-
-              <Tooltip label="Share on LinkedIn" hasArrow>
-                <LinkedinShareButton url={shareUrl} title={title}>
-                  <LinkedinIcon size={32} round />
-                </LinkedinShareButton>
-              </Tooltip>
-            </Flex>
-          </Box>*/}
           <Box
             as="button"
             position="relative"
@@ -592,6 +566,7 @@ zIndex={10}
                 transition: "transform 34ms",
               }}
             />
+
             <Button
               onClick={spinWheel}
               disabled={isSpinDisabled}
@@ -623,22 +598,21 @@ zIndex={10}
               <div className="hms">
                 <div className="time-unit">
                   {String(hours).padStart(2, "0")}
-                  <span className="label">H</span>
+                  <span className="label">h</span>
                 </div>
                 :
                 <div className="time-unit">
                   {String(minutes).padStart(2, "0")}
-                  <span className="label">M</span>
+                  <span className="label">m</span>
                 </div>
                 :
                 <div className="time-unit">
                   {String(seconds).padStart(2, "0")}
-                  <span className="label">S</span>
+                  <span className="label">s</span>
                 </div>
               </div>
             </div>
           </Box>
-
           {/* after spining page of reward */}
           <Modal isOpen={isOpen} onClose={handleClose} size="full">
             <ModalOverlay />

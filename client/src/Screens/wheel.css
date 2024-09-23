@@ -54,12 +54,12 @@
 }
 
 .timer {
-  font-size: 20px;
+  font-size: 18px;
   color: white;
   /*background: -webkit-linear-gradient(rgb(72, 5, 92), rgb(185, 104, 209), rgb(247, 244, 244));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;*/
-  font-family: 'Times New Roman';
+  font-family: 'Windsor';
   font-weight: bold;
   padding: 5px 0;
   text-align: center;
@@ -68,12 +68,12 @@
 }
 
 .hms {
-  font-size: 32px;
+  font-size: 38px;
   color: white;
   /*background: -webkit-linear-gradient(rgb(72, 5, 92), rgb(185, 104, 209), rgb(247, 244, 244));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;*/
-  font-family: 'Times New Roman';
+  font-family: 'Algerian';
   font-weight: bold;
   padding: 5px 0;
   display: flex; /* Make the hms div a flex container */
@@ -90,7 +90,7 @@
 .label {
   font-size: 28px; /* Smaller size for h, m, s */
   color: white;
-  margin: 0 16px;
+  margin: 0 14px;
   /*background: -webkit-linear-gradient(rgb(72, 5, 92), rgb(185, 104, 209), rgb(247, 244, 244));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;*/
