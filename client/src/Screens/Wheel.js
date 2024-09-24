@@ -9,6 +9,8 @@ import {
   PopoverCloseButton,
   PopoverHeader,
   PopoverBody,
+  CircularProgress, // Import Chakra UI CircularProgress
+  CircularProgressLabel,
 } from "@chakra-ui/react";
 import { AiOutlineEye, AiOutlineShoppingCart } from "react-icons/ai"; // Add the Shopping Cart icon
 import { Tooltip } from "@chakra-ui/react";
@@ -69,6 +71,10 @@ const Wheel = () => {
   const winSoundRef = useRef(new Audio(winSound)); // Create an audio ref
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch();
+  const totalDuration = 3600;
+
+  // Calculate percentage for CircularProgress
+  const percentage = ((totalDuration - timeLeft) / totalDuration) * 100;
 
   const userLogin = useSelector((state) => state.userLogin || {});
   const { userInfo } = userLogin;
@@ -94,7 +100,7 @@ const Wheel = () => {
 
   const [bonusSpins, setBonusSpins] = useState(0);
   useEffect(() => {
-    setSpinDisabled(!isConnected || user?.spins <= 0);
+    setSpinDisabled(!isConnected || (user?.spins <= 0 && bonusSpins <= 0)); // Disable if no spins available
     setBonusSpins(user?.bonusSpins || 0); // Update bonus spins state
   }, [isConnected, user?.spins, user?.bonusSpins]);
 
@@ -226,7 +232,7 @@ const Wheel = () => {
           await dispatch(updateSpins(walletAddress));
           await dispatch(getUserDetails(walletAddress));
           await dispatch(listUsers());
-          setTimeLeft(86400); // Start the timer after spin completes
+          setTimeLeft(3600); // Start the timer after spin completes
           setSpinDisabled(true); // Disable spin button until timer ends
         }, 1000);
       },
@@ -454,65 +460,102 @@ zIndex={10}
         >
           {/* Display remaining free spins at the top */}
           <div ref={wheelRef} className="wheel"></div>
-          <Flex alignItems="center" mb={2} mt={-10} gap={7}>
-            <Text fontSize="xl" fontWeight="bold" color="white">
-              {user?.spins > 0
-                ? `Daily Free Spin: ${user.spins} ${user.spins > 1 ? "s" : ""} `
-                : "No Free Spins"}
-            </Text>
-            <Tooltip
-              label="By holding your favorite tokens, you’ll receive 4 daily free spins. For those who stake our native CG tokens, you’ll enjoy 6 daily free spins, maximizing your chances to score big. Even if you're not a token holder or staker, you still get 1 daily free spin to join in on the fun!"
-              fontSize="md"
-              bg="rgb(59, 9, 128)"
-              color="white"
-              border="1px solid rgb(140, 65, 245)"
-              placement="top"
-              hasArrow
-            >
-              <Button
-                ml={-7}
-                variant="link"
-                color="white"
-                fontSize="lg"
-                _hover={{ bg: "transparent" }}
-                _active={{ bg: "transparent" }}
-                _focus={{ boxShadow: "none" }}
-              >
-                <AiOutlineEye />
-              </Button>
-            </Tooltip>
-            {/*</Flex>
-        <Flex alignItems="center" mb={2}>*/}
-            <Text fontSize="xl" fontWeight="bold" color="white">
-              {bonusSpins > 0
-                ? `Bonus Spin: ${bonusSpins} ${bonusSpins > 1 ? "s" : ""} `
-                : "No Bonus Spins"}
-            </Text>
-            <Tooltip
-              label="Want more chances to win? You can buy additional spins using Solana (SOL) or CG tokens."
-              fontSize="md"
-              bg="rgb(59, 9, 128)"
-              color="white"
-              border="1px solid rgb(140, 65, 245)"
-              placement="top"
-              hasArrow
-            >
-              <Button
-                ml={-7}
-                variant="link"
-                color="white"
-                fontSize="lg"
-                _hover={{ bg: "transparent" }}
-                _active={{ bg: "transparent" }}
-                _focus={{ boxShadow: "none" }}
-                onClick={() => {
-                  /* handle the buy action here */
-                }}
-              >
-                <AiOutlineShoppingCart />
-              </Button>
-            </Tooltip>
+          <Flex
+            alignItems="center"
+            mb={2}
+            mt={-10}
+            gap={7}
+            flexDirection="column"
+          >
+            {/* Combined Free Spin and Bonus Spin Section */}
+            <Flex alignItems="center" gap={8}>
+              <Flex alignItems="center" gap={6}>
+                <Text fontSize="xl" fontWeight="bold" color="white">
+                  {user?.spins > 0
+                    ? `Daily Free Spin: ${user.spins} ${
+                        user.spins > 1 ? "s" : ""
+                      }`
+                    : "No Free Spins"}
+                </Text>
+                <Flex alignItems="center" gap={2}>
+                  <Tooltip
+                    label="By holding your favorite tokens, you’ll receive 4 daily free spins. For those who stake our native CG tokens, you’ll enjoy 6 daily free spins, maximizing your chances to score big. Even if you're not a token holder or staker, you still get 1 daily free spin to join in on the fun!"
+                    fontSize="md"
+                    bg="rgb(59, 9, 128)"
+                    color="white"
+                    border="1px solid rgb(140, 65, 245)"
+                    placement="top"
+                    hasArrow
+                  >
+                    <Button
+                      ml={-7}
+                      variant="link"
+                      color="white"
+                      fontSize="lg"
+                      _hover={{ bg: "transparent" }}
+                      _active={{ bg: "transparent" }}
+                      _focus={{ boxShadow: "none" }}
+                    >
+                      <AiOutlineEye />
+                    </Button>
+                  </Tooltip>
+
+                  {/* Circular Progress Timer next to Eye Button */}
+                  <Tooltip
+                    label={`${hours}:${
+                      minutes < 10 ? `0${minutes}` : minutes
+                    }:${seconds < 10 ? `0${seconds}` : seconds} left`}
+                    fontSize="md"
+                    bg="rgb(59, 9, 128)"
+                    color="white"
+                    border="1px solid rgb(140, 65, 245)"
+                    placement="top"
+                    hasArrow
+                  >
+                    <CircularProgress
+                      value={percentage}
+                      size="25px"
+                      thickness="8px"
+                      color="rgb(140, 65, 245)"
+                    />
+                  </Tooltip>
+                </Flex>
+              </Flex>
+
+              <Flex alignItems="center" gap={6}>
+                <Text fontSize="xl" fontWeight="bold" color="white">
+                  {bonusSpins > 0
+                    ? `Bonus Spin: ${bonusSpins} ${bonusSpins > 1 ? "s" : ""}`
+                    : "No Bonus Spins"}
+                </Text>
+                <Tooltip
+                  label="Want more chances to win? You can buy additional spins using Solana (SOL) or CG tokens."
+                  fontSize="md"
+                  bg="rgb(59, 9, 128)"
+                  color="white"
+                  border="1px solid rgb(140, 65, 245)"
+                  placement="top"
+                  hasArrow
+                >
+                  <Button
+                    ml={-7}
+                    variant="link"
+                    color="white"
+                    fontSize="lg"
+                    _hover={{ bg: "transparent" }}
+                    _active={{ bg: "transparent" }}
+                    _focus={{ boxShadow: "none" }}
+                    onClick={() => {
+                      /* handle the buy action here */
+                    }}
+                  >
+                    <AiOutlineShoppingCart />
+                  </Button>
+                </Tooltip>
+              </Flex>
+            </Flex>
           </Flex>
+
           <Box
             position="relative"
             w="500px"
@@ -594,25 +637,6 @@ zIndex={10}
             >
               Spin the Wheel
             </Button>
-            <div className="timer">
-              Next spin in:{" "}
-              <div className="hms">
-                <div className="time-unit">
-                  {String(hours).padStart(2, "0")}
-                  <span className="label">h</span>
-                </div>
-                :
-                <div className="time-unit">
-                  {String(minutes).padStart(2, "0")}
-                  <span className="label">m</span>
-                </div>
-                :
-                <div className="time-unit">
-                  {String(seconds).padStart(2, "0")}
-                  <span className="label">s</span>
-                </div>
-              </div>
-            </div>
           </Box>
           {/* after spining page of reward */}
           <Modal isOpen={isOpen} onClose={handleClose} size="full">
