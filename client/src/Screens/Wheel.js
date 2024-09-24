@@ -676,7 +676,7 @@ zIndex={10}
                     color="#25D366"
                     onClick={() => {
                       // WhatsApp sharing logic
-                      const message = `Hey! I just won this exciting reward of- ${display} Check out this awesome game here: ${window.location.href} Join the fun and win rewards!`;
+                      const message = `Hey! I just won this exciting reward of- ${display}. Check out this awesome game here: ${window.location.href} Join the fun and win rewards!`;
                       window.open(
                         `https://api.whatsapp.com/send?text=${encodeURIComponent(
                           message
