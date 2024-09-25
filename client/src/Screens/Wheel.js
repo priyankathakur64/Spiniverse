@@ -15,16 +15,6 @@ import {
 import { AiOutlineEye, AiOutlineShoppingCart } from "react-icons/ai"; // Add the Shopping Cart icon
 import { Tooltip } from "@chakra-ui/react";
 import {
-  TwitterShareButton,
-  FacebookShareButton,
-  WhatsappShareButton,
-  LinkedinShareButton,
-  TwitterIcon,
-  FacebookIcon,
-  WhatsappIcon,
-  LinkedinIcon,
-} from "react-share";
-import {
   Grid,
   Box,
   Button,
@@ -60,6 +50,8 @@ import { IoChevronDown } from "react-icons/io5";
 import winSound from "../assets/win-sound.mp3"; // Import the sound file
 import confetti from "canvas-confetti";
 import "./wheel.css";
+import { WalletReadyState } from "@solana/wallet-adapter-base";
+
 const Wheel = () => {
   const [display, setDisplay] = useState("-");
   const [walletAddress, setWalletAddress] = useState("");
@@ -100,7 +92,7 @@ const Wheel = () => {
 
   const [bonusSpins, setBonusSpins] = useState(0);
   useEffect(() => {
-    setSpinDisabled(!isConnected || (user?.spins <= 0 && bonusSpins <= 0)); // Disable if no spins available
+    setSpinDisabled(!isConnected || user?.spins <= 0);
     setBonusSpins(user?.bonusSpins || 0); // Update bonus spins state
   }, [isConnected, user?.spins, user?.bonusSpins]);
 
@@ -232,7 +224,13 @@ const Wheel = () => {
           await dispatch(updateSpins(walletAddress));
           await dispatch(getUserDetails(walletAddress));
           await dispatch(listUsers());
-          setTimeLeft(3600); // Start the timer after spin completes
+          // Timer logic based on spins
+          if (user?.spins === 1) {
+            setTimeLeft(24 * 60 * 60); // 24 hours in seconds
+          } else if (user?.spins > 1) {
+            setTimeLeft(60 * 60); // 1 hour in seconds
+          }
+
           setSpinDisabled(true); // Disable spin button until timer ends
         }, 1000);
       },
@@ -512,12 +510,14 @@ zIndex={10}
                     placement="top"
                     hasArrow
                   >
-                    <CircularProgress
-                      value={percentage}
-                      size="25px"
-                      thickness="8px"
-                      color="rgb(140, 65, 245)"
-                    />
+                    <Box display="flex" alignItems="center">
+                      <CircularProgress
+                        value={percentage}
+                        size="25px"
+                        thickness="8px"
+                        color="rgb(140, 65, 245)"
+                      />
+                    </Box>
                   </Tooltip>
                 </Flex>
               </Flex>
